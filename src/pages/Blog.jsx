@@ -5,23 +5,25 @@ import { useSelector } from "react-redux";
 import { marked } from "marked";
 import parse from "html-react-parser";
 import blogService from "../blog/blog";
-import { FaTrash, FaEdit, FaComment } from "react-icons/fa";
+import { FaTrash, FaEdit, FaComment, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
 
 export default function Blog() {
-	const [post, setPost] = useState(null);
+	const [blog, setBlog] = useState(null);
+	const [newComment, setNewComment] = useState("");
 	const { id } = useParams();
 	const navigate = useNavigate();
 
 	const userData = useSelector((state) => state.auth.userData);
+	const isAuthor = blog && userData ? blog.user_id === userData.id : false;
 
-	const isAuthor = post && userData ? post.user_id === userData.id : false;
+
 
 	useEffect(() => {
 		if (id) {
 			blogService.getBlogById(id)
 				.then((response) => {
 					if (response?.data?.blog) {
-						setPost(response.data.blog);
+						setBlog(response.data.blog);
 					} else {
 						navigate("/");
 					}
@@ -35,11 +37,11 @@ export default function Blog() {
 		}
 	}, [id, navigate]);
 
-	const deletePost = async () => {
+	const deleteBlog = async () => {
 		if (window.confirm("Are you sure you want to delete this blog?")) {
 			try {
 				await blogService.deleteBlog(id);
-				navigate("/"); // Redirect to homepage after deletion
+				navigate("/");
 			} catch (error) {
 				console.error("Error deleting blog:", error);
 				alert("Failed to delete blog. Please try again.");
@@ -47,25 +49,54 @@ export default function Blog() {
 		}
 	};
 
-	return post ? (
+	const handleLike = async () => {
+		try {
+			await blogService.likeBlog(id);
+			setBlog((prev) => ({ ...prev, likes: [...prev.likes, { user_id: userData.id }] }));
+		} catch (error) {
+			console.error("Error liking blog:", error);
+		}
+	};
+
+	const handleDislike = async () => {
+		try {
+			await blogService.dislikeBlog(id);
+			setBlog((prev) => ({ ...prev, likes: prev.likes.filter(like => like.user_id !== userData.id) }));
+		} catch (error) {
+			console.error("Error disliking blog:", error);
+		}
+	};
+
+	const addComment = async () => {
+		if (!newComment.trim()) return;
+		try {
+			const response = await blogService.addComment(id, newComment);
+			setBlog((prev) => ({ ...prev, comments: [...prev.comments, response.data.comment] }));
+			setNewComment("");
+		} catch (error) {
+			console.error("Error adding comment:", error);
+		}
+	};
+
+	return blog ? (
 		<div className="py-12 bg-gray-50 min-h-screen">
 			<Container>
 				<div className="max-w-3xl mx-auto bg-white p-8 shadow-lg rounded-lg">
 					{/* Blog Header */}
 					<div className="mb-6">
-						<h1 className="text-3xl font-extrabold text-gray-900">{post.title}</h1>
+						<h1 className="text-3xl font-extrabold text-gray-900">{blog.title}</h1>
 						<p className="text-gray-500 text-sm mt-1">
-							Published on {new Date(post.created_at).toLocaleDateString()}
+							Published on {new Date(blog.created_at).toLocaleDateString()}
 						</p>
 					</div>
 
 					{/* Action Buttons */}
 					{isAuthor && (
 						<div className="flex justify-end gap-3 mb-4">
-							<Link to={`/edit-post/${post.id}`} className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+							<Link to={`/edit-blog/${blog.id}`} className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
 								<FaEdit className="mr-2" /> Edit
 							</Link>
-							<button onClick={deletePost} className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+							<button onClick={deleteBlog} className="flex items-center bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
 								<FaTrash className="mr-2" /> Delete
 							</button>
 						</div>
@@ -73,7 +104,17 @@ export default function Blog() {
 
 					{/* Blog Content */}
 					<div className="prose max-w-none">
-						{parse(marked(post.content || ""))}
+						{parse(marked(blog.content || ""))}
+					</div>
+
+					{/* Like & Dislike Buttons */}
+					<div className="flex items-center mt-4 gap-3">
+						<button onClick={handleLike} className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+							<FaThumbsUp className="mr-2" /> Like ({blog.likes.length})
+						</button>
+						<button onClick={handleDislike} className="flex items-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+							<FaThumbsDown className="mr-2" /> Dislike
+						</button>
 					</div>
 
 					{/* Comments Section */}
@@ -82,13 +123,11 @@ export default function Blog() {
 							<FaComment className="mr-2" /> Comments
 						</h2>
 						<div className="mt-3">
-							{post.comments.length > 0 ? (
-								post.comments.map((comment) => (
+							{blog.comments.length > 0 ? (
+								blog.comments.map((comment) => (
 									<div key={comment.id} className="bg-gray-100 rounded-lg p-4 mb-3">
 										<p className="text-gray-700">{comment.content}</p>
-										<span className="text-xs text-gray-500">
-											{new Date(comment.created_at).toLocaleString()}
-										</span>
+										<span className="text-xs text-gray-500">{new Date(comment.created_at).toLocaleString()}</span>
 									</div>
 								))
 							) : (

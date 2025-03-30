@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux"
 import authService from "../auth/auth"
 import { useForm } from "react-hook-form"
 
-function Login() {
+function LoginComponent() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { register, handleSubmit } = useForm()
@@ -16,12 +16,12 @@ function Login() {
 		setError("");
 		try {
 			const session = await authService.login(data);
+
 			if (session) {
 				const userData = await authService.getCurrentUser();
-				console.log(userData.data.user);
 
 				if (userData?.data?.user) {
-					dispatch(authLogin(userData.data.user));
+				dispatch(authLogin(userData.data.user)); // ✅ Only dispatch the user object
 					navigate("/");
 				}
 			}
@@ -29,7 +29,6 @@ function Login() {
 			setError(error.message);
 		}
 	};
-
 
 	return (
 		<div
@@ -85,4 +84,4 @@ function Login() {
 	)
 }
 
-export default Login
+export default LoginComponent

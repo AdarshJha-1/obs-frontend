@@ -1,25 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
-    status : false,
-    userData: null
-}
+  status: false,
+  userData: null,
+};
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        login: (state, action) => {
-            state.status = true;
-            state.userData = action.payload;
-        },
-        logout: (state) => {
-            state.status = false;
-            state.userData = null;
-        }
-     }
-})
+  name: "auth",
+  initialState,
+  reducers: {
+    login: (state, action) => {
+      console.log("Updating Redux with user:", action.payload);
+      state.status = true;
+      state.userData = action.payload;
+    },
+    logout: (state) => {
+      console.log("Logging out");
+      state.status = false;
+      state.userData = null;
+    },
+  },
+});
 
-export const {login, logout} = authSlice.actions;
+// ✅ Extract actions
+export const { login, logout } = authSlice.actions;
 
-export default authSlice.reducer;
+// ✅ Persist Reducer Configuration
+const persistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["userData"], // Only persist userData
+};
+
+export const authReducer = persistReducer(persistConfig, authSlice.reducer);

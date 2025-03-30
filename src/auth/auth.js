@@ -47,6 +47,19 @@ export class AuthService {
 			return null;
 		}
 	}
+
+	async getUserById(id) {
+		try {
+			const res = await this.api.get(`/user/${id}`);
+			if (!res.status.toString().startsWith("2")) {
+				throw new Error(res.data);
+			}
+			return res.data;
+		} catch (error) {
+			console.error("AuthService :: getCurrentUser :: error", error);
+			return null;
+		}
+	}
 }
 
 const authService = new AuthService();
