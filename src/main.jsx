@@ -23,7 +23,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home />,
+                element: (
+                    <AuthLayout authentication>
+                        <Home/>
+                    </AuthLayout>
+                ),
             },
             {
                 path: "/login",
@@ -70,7 +74,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "/blog/:id",
-                element: <Blog />,
+                element: (
+                    <AuthLayout authentication>
+                        {" "}
+                        <Blog />
+                    </AuthLayout>
+                ),
             },
         ],
     },

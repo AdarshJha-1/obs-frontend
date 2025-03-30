@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, PostCard } from "../components";
+import { Container} from "../components";
 import blogService from "../blog/blog";
-
+import BlogCard from "../components/BlogCard";
 function AllBlogs() {
 	const [blogs, setBlogs] = useState([]);
 
@@ -26,7 +26,7 @@ function AllBlogs() {
 				<div className="flex flex-wrap">
 					{blogs.map((blog) => (
 						<div key={blog.id} className="p-2 w-1/4">
-							<PostCard {...blog} />
+							<BlogCard {...blog} />
 						</div>
 					))}
 				</div>

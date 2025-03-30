@@ -31,7 +31,6 @@ export const { login, logout } = authSlice.actions;
 const persistConfig = {
   key: "auth",
   storage,
-  whitelist: ["userData"], // Only persist userData
+  whitelist: ["userData", "status"], // ✅ Persist auth status too
 };
-
 export const authReducer = persistReducer(persistConfig, authSlice.reducer);

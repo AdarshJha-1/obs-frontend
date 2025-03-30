@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import blogService from "../blog/blog"; // Import BlogService
-import { Container, PostCard } from "../components";
+import { Container} from "../components";
+import BlogCard from "../components/BlogCard";
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -55,7 +56,7 @@ function Home() {
                 <div className="flex flex-wrap">
                     {posts.map((post) => (
                         <div key={post.id} className="p-2 w-1/4">
-                            <PostCard {...post} />
+                            <BlogCard {...post} />
                         </div>
                     ))}
                 </div>

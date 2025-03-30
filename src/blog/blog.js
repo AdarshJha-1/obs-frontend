@@ -60,7 +60,18 @@ export class BlogService {
 			throw error.response?.data || error.message;
 		}
 	}
+
+	// Like a blog by ID
+	async likeBlog(blogId) {
+		try {
+			const res = await this.api.post(`/like`, {blog_id : blogId});
+			return res.data;
+		} catch (error) {
+			throw error.response?.data || error.message;
+		}
+	}
 }
+
 
 // Create an instance of BlogService
 const blogService = new BlogService();

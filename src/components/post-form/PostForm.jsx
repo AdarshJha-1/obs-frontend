@@ -12,6 +12,8 @@ export default function blogForm({ blog }) {
 		},
 	});
 
+	console.log(blog);
+	
 	const navigate = useNavigate();
 
 	const submit = async (data) => {

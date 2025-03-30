@@ -10,6 +10,7 @@ import { FaTrash, FaEdit, FaComment, FaThumbsUp, FaThumbsDown } from "react-icon
 export default function Blog() {
 	const [blog, setBlog] = useState(null);
 	const [newComment, setNewComment] = useState("");
+	const [likes, setLikes] = useState(0);
 	const { id } = useParams();
 	const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ export default function Blog() {
 				.then((response) => {
 					if (response?.data?.blog) {
 						setBlog(response.data.blog);
+						setLikes(response.data.blog.likes.length)
 					} else {
 						navigate("/");
 					}
@@ -50,9 +52,14 @@ export default function Blog() {
 	};
 
 	const handleLike = async () => {
+		console.log("clikc:");
+		
+		console.log(blog.id);
 		try {
-			await blogService.likeBlog(id);
+			const res = await blogService.likeBlog(blog.id);
+			if (res.success) {
 			setBlog((prev) => ({ ...prev, likes: [...prev.likes, { user_id: userData.id }] }));
+			}
 		} catch (error) {
 			console.error("Error liking blog:", error);
 		}
@@ -109,7 +116,7 @@ export default function Blog() {
 
 					{/* Like & Dislike Buttons */}
 					<div className="flex items-center mt-4 gap-3">
-						<button onClick={handleLike} className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+						<button onClick={() => handleLike()} className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
 							<FaThumbsUp className="mr-2" /> Like ({blog.likes.length})
 						</button>
 						<button onClick={handleDislike} className="flex items-center bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
