@@ -11,9 +11,9 @@ export class AuthService {
 		});
 	}
 
-	async createAccount({ email, password, username }) {
+	async createAccount({ email, password, username , image_url}) {
 		try {
-			const res = await this.api.post("/register", { email, password, username });
+			const res = await this.api.post("/register", { email, password, username, pfp: image_url });
 			if (!res.status.toString().startsWith("2")) {
 				throw new Error(res.data);
 			}

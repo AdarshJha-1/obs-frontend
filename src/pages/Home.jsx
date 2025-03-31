@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import blogService from "../blog/blog"; // Import BlogService
-import { Container} from "../components";
+import { Container } from "../components";
 import BlogCard from "../components/BlogCard";
 
 function Home() {
@@ -26,9 +26,9 @@ function Home() {
 
     if (loading) {
         return (
-            <div className="w-full py-8 mt-4 text-center">
+            <div className="w-full py-8 text-center">
                 <Container>
-                    <h1 className="text-2xl font-bold text-gray-700">Loading posts...</h1>
+                    <h1 className="text-2xl font-semibold text-gray-700">Loading posts...</h1>
                 </Container>
             </div>
         );
@@ -36,28 +36,22 @@ function Home() {
 
     if (posts.length === 0) {
         return (
-            <div className="w-full py-8 mt-4 text-center">
+            <div className="w-full py-8 text-center">
                 <Container>
-                    <div className="flex flex-wrap">
-                        <div className="p-2 w-full">
-                            <h1 className="text-2xl font-bold hover:text-gray-500">
-                                No posts available. Login to create or view posts.
-                            </h1>
-                        </div>
-                    </div>
+                    <h1 className="text-xl font-semibold text-gray-600">
+                        No posts available. Login to create or view posts.
+                    </h1>
                 </Container>
             </div>
         );
     }
 
     return (
-          <div className="w-full py-8">
+        <div className="w-full py-8">
             <Container>
-                <div className="flex flex-wrap">
+                <div className="flex flex-col gap-6">
                     {posts.map((post) => (
-                        <div key={post.id} className="p-2 w-1/4">
-                            <BlogCard {...post} />
-                        </div>
+                        <BlogCard key={post.id} {...post} />
                     ))}
                 </div>
             </Container>

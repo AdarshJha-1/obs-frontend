@@ -64,7 +64,26 @@ export class BlogService {
 	// Like a blog by ID
 	async likeBlog(blogId) {
 		try {
-			const res = await this.api.post(`/like`, {blog_id : blogId});
+			const res = await this.api.post(`/like`, { blog_id: blogId });
+			return res.data;
+		} catch (error) {
+			throw error.response?.data || error.message;
+		}
+	}
+
+	// Add a comment to a blog
+	async addComment(blogId, content) {
+		try {
+			const res = await this.api.post(`/${blogId}/comments/`, { blog_id: Number(blogId), content });
+			return res.data;
+		} catch (error) {
+			throw error.response?.data || error.message;
+		}
+	}
+	
+	async updateView(blogId) {
+		try {
+			const res = await this.api.post(`/${blogId}/view`);
 			return res.data;
 		} catch (error) {
 			throw error.response?.data || error.message;
