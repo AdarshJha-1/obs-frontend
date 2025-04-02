@@ -50,7 +50,7 @@ export class AuthService {
 
 	async getUserById(id) {
 		try {
-			const res = await this.api.get(`/user/${id}`);
+			const res = await this.api.get(`/user/`, {user_id: id});
 			if (!res.status.toString().startsWith("2")) {
 				throw new Error(res.data);
 			}
