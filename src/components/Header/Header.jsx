@@ -13,6 +13,8 @@ function Header() {
     { name: "Login", slug: "/login", active: !authStatus },
     { name: "Signup", slug: "/signup", active: !authStatus },
     { name: "All Blogs", slug: "/all-blogs", active: authStatus },
+    { name: "Profile", slug: "/profile", active: authStatus },
+    { name: "Users", slug: "/users", active: authStatus },
     { name: "Add Blog", slug: "/add-blog", active: authStatus },
   ];
 

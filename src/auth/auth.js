@@ -11,7 +11,7 @@ export class AuthService {
 		});
 	}
 
-	async createAccount({ email, password, username , image_url}) {
+	async createAccount({ email, password, username, image_url }) {
 		try {
 			const res = await this.api.post("/register", { email, password, username, pfp: image_url });
 			if (!res.status.toString().startsWith("2")) {
@@ -60,6 +60,57 @@ export class AuthService {
 			return null;
 		}
 	}
+	async followUser(userId) {
+		try {
+			const res = await this.api.post(`/user/follow/${userId}`);
+			if (!res.status.toString().startsWith("2")) {
+				throw new Error(res.data);
+			}
+			return res.data;
+		} catch (error) {
+			console.error("AuthService :: followUser :: error", error);
+			throw error;
+		}
+	}
+
+	async unfollowUser(userId) {
+		try {
+			const res = await this.api.delete(`/user/unfollow/${userId}`);
+			if (!res.status.toString().startsWith("2")) {
+				throw new Error(res.data);
+			}
+			return res.data;
+		} catch (error) {
+			console.error("AuthService :: unfollowUser :: error", error);
+			throw error;
+		}
+	}
+	async logout() {
+		try {
+			const res = await this.api.post("/user/logout");
+			if (!res.status.toString().startsWith("2")) {
+				throw new Error(res.data);
+			}
+			return res.data;
+		} catch (error) {
+			console.error("AuthService :: logout :: error", error);
+			throw error;
+		}
+	}
+
+	async getAllUsers() {
+		try {
+			const res = await this.api.get(`/user/all`);
+			if (!res.status.toString().startsWith("2")) {
+				throw new Error(res.data);
+			}
+			return res.data;
+		} catch (error) {
+			console.error("AuthService :: getCurrentUser :: error", error);
+			return null;
+		}
+	}
+
 }
 
 const authService = new AuthService();

@@ -15,7 +15,8 @@ import EditPost from "./pages/EditPost";
 
 import AllBlogs from './pages/AllBlogs'
 import Blog from './pages/Blog.jsx'
-import { Profile } from './pages/Profile.jsx'
+import Profile from './pages/Profile.jsx'
+import UserList from './pages/Users.jsx'
 
 const router = createBrowserRouter([
     {
@@ -88,6 +89,15 @@ const router = createBrowserRouter([
                     <AuthLayout authentication>
                         {" "}
                         <Profile />
+                    </AuthLayout>
+                ),
+            },
+  {
+                path: "/users",
+                element: (
+                    <AuthLayout authentication>
+                        {" "}
+                        <UserList />
                     </AuthLayout>
                 ),
             },
