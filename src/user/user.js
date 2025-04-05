@@ -50,7 +50,7 @@ export class AuthService {
 
 	async getUserById(id) {
 		try {
-			const res = await this.api.get(`/user/`, {user_id: id});
+			const res = await this.api.get(`/user/${id}`);
 			if (!res.status.toString().startsWith("2")) {
 				throw new Error(res.data);
 			}
@@ -60,9 +60,9 @@ export class AuthService {
 			return null;
 		}
 	}
-	async followUser(userId) {
+	async followUnfollow(targetId) {
 		try {
-			const res = await this.api.post(`/user/follow/${userId}`);
+			const res = await this.api.post(`/user/follow/${targetId}`);
 			if (!res.status.toString().startsWith("2")) {
 				throw new Error(res.data);
 			}
@@ -73,18 +73,6 @@ export class AuthService {
 		}
 	}
 
-	async unfollowUser(userId) {
-		try {
-			const res = await this.api.delete(`/user/unfollow/${userId}`);
-			if (!res.status.toString().startsWith("2")) {
-				throw new Error(res.data);
-			}
-			return res.data;
-		} catch (error) {
-			console.error("AuthService :: unfollowUser :: error", error);
-			throw error;
-		}
-	}
 	async logout() {
 		try {
 			const res = await this.api.post("/user/logout");

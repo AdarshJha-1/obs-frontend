@@ -15,7 +15,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log("🔹 Logging in user:", action.payload);
       state.status = true;
       state.userData = action.payload;
       state.loginTimestamp = Date.now(); // Store login time

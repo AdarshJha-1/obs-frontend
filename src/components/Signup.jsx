@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import authService from '../auth/auth.js';
+import authService from '../user/user.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Input, Logo } from './index.js';
 import { useForm } from 'react-hook-form';

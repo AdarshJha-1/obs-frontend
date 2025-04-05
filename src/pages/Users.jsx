@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import authService from "../auth/auth";
+import authService from "../user/user";
 import { login } from "../store/authSlice";
 
 function UserList() {
@@ -53,7 +53,7 @@ function UserList() {
 
   const handleFollow = async (userId) => {
     try {
-      await authService.followUser(userId);
+      await authService.followUnfollow(userId);
 
       // Optimistically update UI
       setUsers((prevUsers) =>
@@ -71,7 +71,7 @@ function UserList() {
 
   const handleUnfollow = async (userId) => {
     try {
-      await authService.unfollowUser(userId);
+      await authService.followUnfollow(userId);
 
       // Optimistically update UI
       setUsers((prevUsers) =>

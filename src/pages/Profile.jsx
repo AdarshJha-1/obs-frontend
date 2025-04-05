@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import authService from "../auth/auth";
+import authService from "../user/user";
 import { login } from "../store/authSlice";
 
 function ProfilePage() {
@@ -48,6 +48,9 @@ function ProfilePage() {
     try {
       const followingPromises = followingIds.map((id) => authService.getUserById(id));
       const followingResponses = await Promise.all(followingPromises);
+      followingResponses.map(re => console.log(re)
+      );
+
       setFollowingData(followingResponses.map((res) => res.data.user));
     } catch (error) {
       console.error("Error fetching following:", error);
@@ -56,7 +59,7 @@ function ProfilePage() {
 
   const handleFollow = async (userId) => {
     try {
-      await authService.followUser(userId);
+      await authService.followUnfollow(userId);
       fetchUserProfile(); // Refresh after follow
     } catch (error) {
       console.error("Error following user:", error);
@@ -65,7 +68,7 @@ function ProfilePage() {
 
   const handleUnfollow = async (userId) => {
     try {
-      await authService.unfollowUser(userId);
+      await authService.followUnfollow(userId);
       fetchUserProfile(); // Refresh after unfollow
     } catch (error) {
       console.error("Error unfollowing user:", error);
@@ -87,20 +90,29 @@ function ProfilePage() {
           {followersData.length === 0 ? (
             <p className="text-gray-500">No followers</p>
           ) : (
-            followersData.map((user) => (
-              <li key={user.id} className="text-gray-700 flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <img src={user.pfp} alt={user.username} className="w-10 h-10 rounded-full border" />
-                  <span>{user.username} (ID: {user.id})</span>
-                </div>
-                <button
-                  className="px-3 py-1 bg-blue-500 text-white rounded"
-                  onClick={() => handleFollow(user.id)}
-                >
-                  Follow Back
-                </button>
-              </li>
-            ))
+            followersData.map((user) => {
+              const isAlreadyFollowing = (userData.following || []).includes(user.id);
+
+
+              return (
+                <li key={user.id} className="text-gray-700 flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    <img src={user.pfp} alt={user.username} className="w-10 h-10 rounded-full border" />
+                    <span>{user.username} (ID: {user.id})</span>
+                  </div>
+
+                  {!isAlreadyFollowing && (
+                    <button
+                      className="px-3 py-1 bg-blue-500 text-white rounded"
+                      onClick={() => handleFollow(user.id)}
+                    >
+                      Follow Back
+                    </button>
+                  )}
+                </li>
+              );
+            })
+
           )}
         </ul>
       </div>
