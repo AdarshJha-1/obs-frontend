@@ -17,6 +17,7 @@ import AllBlogs from './pages/AllBlogs'
 import Blog from './pages/Blog.jsx'
 import Profile from './pages/Profile.jsx'
 import UserList from './pages/Users.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
 
 const router = createBrowserRouter([
     {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
                 path: "/",
                 element: (
                     <AuthLayout authentication>
-                        <Home/>
+                        <Home />
                     </AuthLayout>
                 ),
             },
@@ -92,12 +93,21 @@ const router = createBrowserRouter([
                     </AuthLayout>
                 ),
             },
-  {
+            {
                 path: "/users",
                 element: (
                     <AuthLayout authentication>
                         {" "}
                         <UserList />
+                    </AuthLayout>
+                ),
+            },
+            {
+                path: "/admin-dashboard",
+                element: (
+                    <AuthLayout authentication>
+                        {" "}
+                        <AdminDashboard/>
                     </AuthLayout>
                 ),
             },

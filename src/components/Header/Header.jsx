@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
-  
+  const userData = useSelector((state) => state.auth.userData);
+
   const navigate = useNavigate();
+  const isAdmin = userData?.role == "admin" ? true : false
 
   const navItems = [
     { name: "Home", slug: "/", active: true },
@@ -16,6 +18,7 @@ function Header() {
     { name: "Profile", slug: "/profile", active: authStatus },
     { name: "Users", slug: "/users", active: authStatus },
     { name: "Add Blog", slug: "/add-blog", active: authStatus },
+    { name: "Admin Dashboard", slug: "/admin-dashboard", active: isAdmin },
   ];
 
   return (

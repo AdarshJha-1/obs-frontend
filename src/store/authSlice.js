@@ -6,7 +6,6 @@ import storage from "redux-persist/lib/storage";
 const initialState = {
   status: false,
   userData: null,
-  loginTimestamp: null, // Store login time
 };
 
 // ✅ Auth Slice
@@ -17,13 +16,10 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.status = true;
       state.userData = action.payload;
-      state.loginTimestamp = Date.now(); // Store login time
-      localStorage.setItem("loginTimestamp", Date.now()); // Persist it in localStorage
     },
     logout: (state) => {
       console.log("🔻 Logging out user...");
       Object.assign(state, initialState); // ✅ Reset state to initial values
-      localStorage.removeItem("loginTimestamp"); // Remove login time
     },
     resetAuthState: (state) => {
       console.log("♻️ Resetting auth state...");
@@ -40,7 +36,7 @@ export const { login, logout, resetAuthState } = authSlice.actions;
 const persistConfig = {
   key: "auth",
   storage,
-  whitelist: ["userData", "status", "loginTimestamp"], // Persist login time
+  whitelist: ["userData", "status"], // ✅ Removed loginTimestamp
 };
 
 // ✅ Persisted Reducer
