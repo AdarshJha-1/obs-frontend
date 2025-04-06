@@ -3,7 +3,8 @@ import axios from "axios";
 export class CommentService {
 	constructor() {
 		this.api = axios.create({
-			baseURL: "http://localhost:8080/api/comment",  // Ensure it matches backend
+			baseURL: (import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080') + '/api/comment',
+
 			headers: {
 				"Content-Type": "application/json"
 			},

@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   }, [isAdmin, navigate]);
 
   const axiosWithCookies = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: (import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080') + '/api',
     withCredentials: true,
   });
 

@@ -3,7 +3,8 @@ import axios from "axios";
 export class BlogService {
 	constructor() {
 		this.api = axios.create({
-			baseURL: "http://localhost:8080/api/blog",  // Ensure it matches backend
+			baseURL: (import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080') + '/api/blog',
+
 			headers: {
 				"Content-Type": "application/json"
 			},
@@ -80,7 +81,7 @@ export class BlogService {
 			throw error.response?.data || error.message;
 		}
 	}
-	
+
 	async updateView(blogId) {
 		try {
 			const res = await this.api.post(`/${blogId}/view`);
