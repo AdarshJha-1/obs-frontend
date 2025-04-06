@@ -203,7 +203,7 @@ export default function Blog() {
 											<p className="text-gray-700">{comment.content}</p>
 											<div className="flex justify-between items-center text-xs text-gray-500">
 												<span>{new Date(comment.created_at).toLocaleString()}</span>
-												{userData.id === comment.user_id && (
+												{userData?.id === comment.user_id && (
 													<button
 														onClick={() => deleteComment(comment.id, comment.user_id)}
 														className="text-red-500 hover:text-red-700 flex items-center gap-1"
